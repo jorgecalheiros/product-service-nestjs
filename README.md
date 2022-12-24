@@ -71,3 +71,31 @@ Nest is an MIT-licensed open source project. It can grow thanks to the sponsors 
 ## License
 
 Nest is [MIT licensed](LICENSE).
+
+
+# Serviço de cadastro de produtos
+
+
+## Documentação da API
+
+#### Retorna todos os produtos
+
+```http
+  GET /product
+```
+
+
+#### Cadastra um produto
+
+```http
+  POST /products
+```
+
+    {
+	"name":"Morango",
+	"price": 5.50,
+	"category":"fruta",
+	"amount":150
+    }   
+
+
