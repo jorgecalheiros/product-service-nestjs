@@ -1,3 +1,4 @@
+import { Prisma } from '@prisma/client';
 import { Injectable } from '@nestjs/common';
 import { Product } from '../entities/product.entity';
 import { ProductRepositoryContract } from '../repositories/product-repository-contract';
@@ -16,7 +17,6 @@ export interface ProductSaveResponse {
 export interface ProductListResponse {
     products: Product[]
 }
-
 
 @Injectable()
 export class ProductService {
@@ -39,6 +39,13 @@ export class ProductService {
             })
         )
 
+        return {
+            product
+        }
+    }
+
+    async edit(id: number, { name, amount, category, price }: Partial<ProductCreateRequest>): Promise<ProductSaveResponse> {
+        const product = await this.repository.update(id, { name, amount, category, price });
         return {
             product
         }

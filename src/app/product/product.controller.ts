@@ -1,7 +1,8 @@
 import { CreateProductDTO } from './dtos/create-product-dto';
-import { Body, Controller, Get, Post } from '@nestjs/common';
+import { Body, Controller, Get, Param, Patch, Post, Put } from '@nestjs/common';
 import { ProductService } from './product.service';
 import { ProductToHttp, ProductViewModel } from './view-models/product-view-model';
+import { UpdateProductDTO } from './dtos/update-product-dto';
 
 @Controller('product')
 export class ProductController {
@@ -21,6 +22,15 @@ export class ProductController {
             name, price, amount, category
         });
 
+        return ProductViewModel.toHTTP(product);
+    }
+
+    @Put(":id")
+    async updateProduct(
+        @Param('id') id: string,
+        @Body() { name, amount, category, price }: UpdateProductDTO
+    ): Promise<ProductToHttp> {
+        const { product } = await this.service.edit(parseInt(id), { name, amount, category, price });
         return ProductViewModel.toHTTP(product);
     }
 }

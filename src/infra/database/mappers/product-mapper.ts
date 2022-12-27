@@ -1,7 +1,7 @@
 import Prisma from '@prisma/client';
 import { Product } from './../../../app/entities/product.entity';
 export class ProductMapper {
-    static toDatabase(product: Product) {
+    static toDatabasePrisma(product: Product | Partial<Product>) {
         return {
             name: product.name,
             price: product.price,

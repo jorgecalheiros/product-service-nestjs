@@ -8,6 +8,14 @@ import { PrismaService } from '../prisma.service';
 export class ProductRepository implements ProductRepositoryContract {
     constructor(private prisma: PrismaService) { }
 
+    async update(id: number, product: Partial<Product>): Promise<Product> {
+        const response = await this.prisma.product.update({
+            data: ProductMapper.toDatabasePrisma(product),
+            where: { id }
+        })
+        return ProductMapper.toDomain(response);
+    }
+
 
     async findMany(): Promise<Product[]> {
         const response = await this.prisma.product.findMany();
@@ -16,7 +24,7 @@ export class ProductRepository implements ProductRepositoryContract {
 
     async create(product: Product): Promise<Product> {
         const response = await this.prisma.product.create({
-            data: ProductMapper.toDatabase(product)
+            data: ProductMapper.toDatabasePrisma(product)
         })
         return ProductMapper.toDomain(response);
     }

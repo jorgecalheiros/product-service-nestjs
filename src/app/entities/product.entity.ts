@@ -44,9 +44,4 @@ export class Product {
     public set category(category: string) {
         this.props.category = category;
     }
-
-
-    public teste(): number {
-        return this.props.price * 20;
-    }
 }
