@@ -3,6 +3,7 @@ import { Body, Controller, Get, Param, Patch, Post, Put } from '@nestjs/common';
 import { ProductService } from './product.service';
 import { ProductToHttp, ProductViewModel } from './view-models/product-view-model';
 import { UpdateProductDTO } from './dtos/update-product-dto';
+import { ChangeStockProductDTO } from './dtos/change-stock-product';
 
 @Controller('product')
 export class ProductController {
@@ -39,6 +40,15 @@ export class ProductController {
         @Body() { name, amount, category, price }: UpdateProductDTO
     ): Promise<ProductToHttp> {
         const { product } = await this.service.edit(parseInt(id), { name, amount, category, price });
+        return ProductViewModel.toHTTP(product);
+    }
+
+    @Put('changestock/:id')
+    async changeStockProduct(
+        @Param('id') id: string,
+        @Body() { amount }: ChangeStockProductDTO
+    ): Promise<ProductToHttp> {
+        const { product } = await this.service.changeStock(parseInt(id), amount);
         return ProductViewModel.toHTTP(product);
     }
 }

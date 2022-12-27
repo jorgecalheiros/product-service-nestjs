@@ -48,4 +48,20 @@ describe("Product Service", () => {
 
     expect(response).toBe(product);
   })
+
+  it("should be able to add a product on stock", async () => {
+    const repository = new DatabaseInMemory();
+    const service = new ProductService(repository);
+    const response = await repository.create(ProductFactory.make({ id: 1 }));
+    const { product } = await service.changeStock(1, 10);
+    expect(response.amount).toBe(product.amount);
+  })
+
+  it("should be able to remove a product on stock", async () => {
+    const repository = new DatabaseInMemory();
+    const service = new ProductService(repository);
+    const response = await repository.create(ProductFactory.make({ id: 1 }));
+    const { product } = await service.changeStock(1, -10);
+    expect(response.amount).toBe(product.amount);
+  })
 })

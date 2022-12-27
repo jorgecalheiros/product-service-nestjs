@@ -1,4 +1,3 @@
-import { Prisma } from '@prisma/client';
 import { Injectable } from '@nestjs/common';
 import { Product } from '../entities/product.entity';
 import { ProductRepositoryContract } from '../repositories/product-repository-contract';
@@ -53,6 +52,17 @@ export class ProductService {
 
     async edit(id: number, { name, amount, category, price }: Partial<ProductCreateRequest>): Promise<ProductSaveResponse> {
         const product = await this.repository.update(id, { name, amount, category, price });
+        return {
+            product
+        }
+    }
+
+    async changeStock(id: number, amount: number): Promise<ProductSaveResponse> {
+        const productFound = await this.repository.findOne(id);
+        const stock = productFound.amount + amount;
+        const product = await this.repository.update(id, {
+            amount: stock
+        })
         return {
             product
         }
