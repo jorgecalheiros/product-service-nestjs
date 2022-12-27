@@ -8,10 +8,18 @@ import { UpdateProductDTO } from './dtos/update-product-dto';
 export class ProductController {
     constructor(private service: ProductService) { }
 
-    @Get('')
+    @Get()
     async getAllProducts(): Promise<ProductToHttp[]> {
         const { products } = await this.service.list();
         return products.map(ProductViewModel.toHTTP);
+    }
+
+    @Get(':id')
+    async getOneProduct(
+        @Param('id') id: string
+    ): Promise<ProductToHttp> {
+        const { product } = await this.service.show(parseInt(id));
+        return ProductViewModel.toHTTP(product);
     }
 
     @Post()
@@ -25,7 +33,7 @@ export class ProductController {
         return ProductViewModel.toHTTP(product);
     }
 
-    @Put(":id")
+    @Put(':id')
     async updateProduct(
         @Param('id') id: string,
         @Body() { name, amount, category, price }: UpdateProductDTO

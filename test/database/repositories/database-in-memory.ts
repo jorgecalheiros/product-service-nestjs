@@ -4,6 +4,12 @@ import { ProductRepositoryContract } from "../../../src/app/repositories/product
 export class DatabaseInMemory implements ProductRepositoryContract {
     public products: Product[] = [];
 
+
+    async findOne(id: number): Promise<Product> {
+        const product = this.products.filter(product => product.id == id);
+        return product[0];
+    }
+
     async findMany(): Promise<Product[]> {
         return this.products;
     }

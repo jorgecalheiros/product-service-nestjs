@@ -7,7 +7,6 @@ import { PrismaService } from '../prisma.service';
 @Injectable()
 export class ProductRepository implements ProductRepositoryContract {
     constructor(private prisma: PrismaService) { }
-
     async update(id: number, product: Partial<Product>): Promise<Product> {
         const response = await this.prisma.product.update({
             data: ProductMapper.toDatabasePrisma(product),
@@ -16,6 +15,12 @@ export class ProductRepository implements ProductRepositoryContract {
         return ProductMapper.toDomain(response);
     }
 
+    async findOne(id: number): Promise<Product> {
+        const response = await this.prisma.product.findFirst({
+            where: { id }
+        })
+        return ProductMapper.toDomain(response);
+    }
 
     async findMany(): Promise<Product[]> {
         const response = await this.prisma.product.findMany();
