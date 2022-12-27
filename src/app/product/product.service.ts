@@ -29,6 +29,13 @@ export class ProductService {
         }
     }
 
+    async show(id: number): Promise<ProductSaveResponse> {
+        const product = await this.repository.findOne(id);
+        return {
+            product
+        }
+    }
+
     async store({ name, price, amount, category }: ProductCreateRequest): Promise<ProductSaveResponse> {
         const product = await this.repository.create(
             new Product({

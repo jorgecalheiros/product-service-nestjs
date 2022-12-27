@@ -39,4 +39,13 @@ describe("Product Service", () => {
 
     expect(updated.product.price).toBe(20.00);
   });
+
+  it("should be able to get a product by id", async () => {
+    const repository = new DatabaseInMemory();
+    const service = new ProductService(repository);
+    const response = await repository.create(ProductFactory.make({ id: 1 }));
+    const { product } = await service.show(1);
+
+    expect(response).toBe(product);
+  })
 })
