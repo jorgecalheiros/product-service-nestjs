@@ -6,6 +6,7 @@ export class ProductFactory {
     static make(override: Override) {
         return (
             new Product({
+                id: 1,
                 name: "Chuchu",
                 category: "legumes",
                 amount: 10,

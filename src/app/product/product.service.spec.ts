@@ -23,12 +23,20 @@ describe("Product Service", () => {
     const service = new ProductService(repository);
 
     for (let i = 0; i < 10; i++) {
-      const product = ProductFactory.make({});
+      const product = ProductFactory.make({ id: 2 });
       repository.create(product);
     }
     const { products } = await service.list();
-
     expect(products).toBe(repository.products);
     expect(products).toHaveLength(10);
   })
+
+  it("should be able to update a product", async () => {
+    const repository = new DatabaseInMemory();
+    const service = new ProductService(repository);
+    await repository.create(ProductFactory.make({ id: 1 }));
+    const updated = await service.edit(1, { price: 20.00 });
+
+    expect(updated.product.price).toBe(20.00);
+  });
 })
