@@ -13,10 +13,21 @@ export interface ProductSaveResponse {
     product: Product
 }
 
+export interface ProductListResponse {
+    products: Product[]
+}
+
 
 @Injectable()
 export class ProductService {
     constructor(private repository: ProductRepositoryContract) { }
+
+    async list(): Promise<ProductListResponse> {
+        const products = await this.repository.findMany();
+        return {
+            products
+        }
+    }
 
     async store({ name, price, amount, category }: ProductCreateRequest): Promise<ProductSaveResponse> {
         const product = await this.repository.create(

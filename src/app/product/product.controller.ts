@@ -8,8 +8,9 @@ export class ProductController {
     constructor(private service: ProductService) { }
 
     @Get('')
-    async getAllProducts(): Promise<string> {
-        return "";
+    async getAllProducts(): Promise<ProductToHttp[]> {
+        const { products } = await this.service.list();
+        return products.map(ProductViewModel.toHTTP);
     }
 
     @Post()
