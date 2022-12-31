@@ -26,4 +26,9 @@ export class DatabaseInMemory implements ProductRepositoryContract {
         this.products[index].category = product.category ?? this.products[index].category;
         return this.products[index];
     }
+
+    async delete(id: number): Promise<void> {
+        const index = this.products.findIndex(product => product.id == id);
+        this.products.splice(index, 1);
+    }
 }

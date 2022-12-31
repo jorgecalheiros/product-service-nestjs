@@ -35,4 +35,10 @@ export class ProductRepository implements ProductRepositoryContract {
         return ProductMapper.toDomain(response);
     }
 
+    async delete(id: number): Promise<void> {
+        await this.prisma.product.delete({
+            where: { id }
+        })
+    }
+
 }
