@@ -64,4 +64,13 @@ describe("Product Service", () => {
     const { product } = await service.changeStock(1, -10);
     expect(response.amount).toBe(product.amount);
   })
+
+  it("should be able to remove all product on database", async () => {
+    const repository = new DatabaseInMemory();
+    const service = new ProductService(repository);
+    const response = await repository.create(ProductFactory.make({ id: 1 }));
+    await service.delete(response.id);
+    expect(repository.products).toHaveLength(0);
+
+  })
 })
