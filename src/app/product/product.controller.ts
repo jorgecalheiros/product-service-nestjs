@@ -1,15 +1,26 @@
 import { CreateProductDTO } from './dtos/create-product-dto';
-import { Body, Controller, Get, Post } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Patch, Post, Put } from '@nestjs/common';
 import { ProductService } from './product.service';
 import { ProductToHttp, ProductViewModel } from './view-models/product-view-model';
+import { UpdateProductDTO } from './dtos/update-product-dto';
+import { ChangeStockProductDTO } from './dtos/change-stock-product';
 
 @Controller('product')
 export class ProductController {
     constructor(private service: ProductService) { }
 
-    @Get('')
-    async getAllProducts(): Promise<string> {
-        return "";
+    @Get()
+    async getAllProducts(): Promise<ProductToHttp[]> {
+        const { products } = await this.service.list();
+        return products.map(ProductViewModel.toHTTP);
+    }
+
+    @Get(':id')
+    async getOneProduct(
+        @Param('id') id: string
+    ): Promise<ProductToHttp> {
+        const { product } = await this.service.show(parseInt(id));
+        return ProductViewModel.toHTTP(product);
     }
 
     @Post()
@@ -21,5 +32,30 @@ export class ProductController {
         });
 
         return ProductViewModel.toHTTP(product);
+    }
+
+    @Put(':id')
+    async updateProduct(
+        @Param('id') id: string,
+        @Body() { name, amount, category, price }: UpdateProductDTO
+    ): Promise<ProductToHttp> {
+        const { product } = await this.service.edit(parseInt(id), { name, amount, category, price });
+        return ProductViewModel.toHTTP(product);
+    }
+
+    @Put('changestock/:id')
+    async changeStockProduct(
+        @Param('id') id: string,
+        @Body() { amount }: ChangeStockProductDTO
+    ): Promise<ProductToHttp> {
+        const { product } = await this.service.changeStock(parseInt(id), amount);
+        return ProductViewModel.toHTTP(product);
+    }
+
+    @Delete(':id')
+    async deleteProduct(
+        @Param('id') id: string,
+    ): Promise<void> {
+        await this.service.delete(parseInt(id));
     }
 }
