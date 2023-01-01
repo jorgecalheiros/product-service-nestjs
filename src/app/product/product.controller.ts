@@ -1,10 +1,12 @@
 import { CreateProductDTO } from './dtos/create-product-dto';
-import { Body, Controller, Delete, Get, Param, Patch, Post, Put } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post, Put } from '@nestjs/common';
 import { ProductService } from './product.service';
 import { ProductToHttp, ProductViewModel } from './view-models/product-view-model';
 import { UpdateProductDTO } from './dtos/update-product-dto';
 import { ChangeStockProductDTO } from './dtos/change-stock-product';
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags('Products')
 @Controller('product')
 export class ProductController {
     constructor(private service: ProductService) { }
