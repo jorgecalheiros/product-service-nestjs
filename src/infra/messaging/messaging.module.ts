@@ -1,12 +1,12 @@
+import { DatabaseModule } from './../database/database.module';
 import { Module } from '@nestjs/common';
+import { ConsumerService } from './kafka/consumer/consumer.service';
+import { ConsumerController } from './kafka/consumer/consumer.controller';
 import { ProductService } from 'src/app/product/product.service';
-import { DatabaseModule } from '../database/database.module';
-import { KafkaController } from './kafka/kafka.controller';
-import { KafkaService } from './kafka/kafka.service';
 
 @Module({
   imports: [DatabaseModule],
-  controllers: [KafkaController],
-  providers: [KafkaService, ProductService]
+  providers: [ConsumerService, ProductService],
+  controllers: [ConsumerController],
 })
 export class MessagingModule { }
