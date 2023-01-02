@@ -10,16 +10,24 @@ export class ProductController {
 
     @Get()
     async getAllProducts(): Promise<ProductToHttp[]> {
-        const { products } = await this.service.list();
-        return products.map(ProductViewModel.toHTTP);
+        try {
+            const { products } = await this.service.list();
+            return products.map(ProductViewModel.toHTTP);
+        } catch (error) {
+            return error;
+        }
     }
 
     @Get(':id')
     async getOneProduct(
         @Param('id') id: string
     ): Promise<ProductToHttp> {
-        const { product } = await this.service.show(parseInt(id));
-        return ProductViewModel.toHTTP(product);
+        try {
+            const { product } = await this.service.show(parseInt(id));
+            return ProductViewModel.toHTTP(product);
+        } catch (error) {
+            return error;
+        }
     }
 
     /*
