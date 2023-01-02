@@ -18,6 +18,11 @@ interface DeleteProductPayload {
     id: number
 }
 
+interface ChangeStockProductPayload {
+    id: number
+    amount: number
+}
+
 
 
 @Controller()
@@ -43,5 +48,12 @@ export class ConsumerController {
         @Payload() payload: DeleteProductPayload
     ) {
         await this.productService.delete(payload.id);
+    }
+
+    @EventPattern('products.changestock-product')
+    async handleChangeStockProduct(
+        @Payload() payload: ChangeStockProductPayload
+    ) {
+        await this.productService.changeStock(payload.id, payload.amount)
     }
 }
