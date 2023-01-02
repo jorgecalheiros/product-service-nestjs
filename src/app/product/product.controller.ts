@@ -1,9 +1,6 @@
-import { CreateProductDTO } from './dtos/create-product-dto';
-import { Body, Controller, Delete, Get, Param, Post, Put } from '@nestjs/common';
+import { Controller, Get, Param } from '@nestjs/common';
 import { ProductService } from './product.service';
 import { ProductToHttp, ProductViewModel } from './view-models/product-view-model';
-import { UpdateProductDTO } from './dtos/update-product-dto';
-import { ChangeStockProductDTO } from './dtos/change-stock-product';
 import { ApiTags } from '@nestjs/swagger';
 
 @ApiTags('Products')
@@ -25,6 +22,7 @@ export class ProductController {
         return ProductViewModel.toHTTP(product);
     }
 
+    /*
     @Post()
     async createProduct(
         @Body() { name, amount, price, category }: CreateProductDTO
@@ -60,4 +58,5 @@ export class ProductController {
     ): Promise<void> {
         await this.service.delete(parseInt(id));
     }
+    */
 }

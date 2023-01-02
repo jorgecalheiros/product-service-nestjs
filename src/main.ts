@@ -17,10 +17,10 @@ async function bootstrap() {
   })
 
   const config = new DocumentBuilder()
-    .setTitle('Products Service')
+    .setTitle('Product Service')
     .setDescription('Products service api')
     .setVersion('0.1')
-    .addTag('Products')
+    .addTag('Product')
     .build();
 
   const document = SwaggerModule.createDocument(app, config);
