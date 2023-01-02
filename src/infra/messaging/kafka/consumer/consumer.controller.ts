@@ -1,4 +1,4 @@
-import { Controller } from '@nestjs/common';
+import { Controller, Logger } from '@nestjs/common';
 import { EventPattern, Payload } from '@nestjs/microservices';
 import { ProductService } from 'src/app/product/product.service';
 
@@ -27,20 +27,24 @@ interface ChangeStockProductPayload {
 
 @Controller()
 export class ConsumerController {
+    private readonly logger = new Logger('PRODUCT_SERVICE')
+
     constructor(private readonly productService: ProductService) { }
 
     @EventPattern('products.create-product')
     async handleCreateProduct(
-        @Payload() product: CreateProductPayload
+        @Payload() payload: CreateProductPayload
     ): Promise<any> {
-        await this.productService.store(product);
+        const { product } = await this.productService.store(payload);
+        this.logger.log(`A product was created, product id:${product.id}`);
     }
 
     @EventPattern('products.update-product')
     async handleUpdateProduct(
         @Payload() payload: UpdateProductPayload
     ): Promise<any> {
-        await this.productService.edit(payload.id, payload.product);
+        const { product } = await this.productService.edit(payload.id, payload.product);
+        this.logger.log(`A product of id ${product.id} has been updated`);
     }
 
     @EventPattern('products.delete-product')
@@ -48,12 +52,14 @@ export class ConsumerController {
         @Payload() payload: DeleteProductPayload
     ) {
         await this.productService.delete(payload.id);
+        this.logger.log(`A product of id ${payload.id} has been deleted`);
     }
 
     @EventPattern('products.changestock-product')
     async handleChangeStockProduct(
         @Payload() payload: ChangeStockProductPayload
     ) {
-        await this.productService.changeStock(payload.id, payload.amount)
+        const { product } = await this.productService.changeStock(payload.id, payload.amount)
+        this.logger.log(`O estoque do produto de id ${product.id} foi alterado`);
     }
 }
