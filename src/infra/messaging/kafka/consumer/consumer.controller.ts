@@ -14,6 +14,10 @@ interface UpdateProductPayload {
     product: Partial<CreateProductPayload>
 }
 
+interface DeleteProductPayload {
+    id: number
+}
+
 
 
 @Controller()
@@ -32,5 +36,12 @@ export class ConsumerController {
         @Payload() payload: UpdateProductPayload
     ): Promise<any> {
         await this.productService.edit(payload.id, payload.product);
+    }
+
+    @EventPattern('products.delete-product')
+    async handleDeleteProduct(
+        @Payload() payload: DeleteProductPayload
+    ) {
+        await this.productService.delete(payload.id);
     }
 }
