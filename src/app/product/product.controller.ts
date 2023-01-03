@@ -6,7 +6,7 @@ import { ApiTags } from '@nestjs/swagger';
 import { EventPattern, Payload } from '@nestjs/microservices';
 
 @ApiTags('Products')
-@Controller('product')
+@Controller('/api/v1/products')
 export class ProductController {
     private readonly logger = new Logger('PRODUCT_SERVICE')
     constructor(private service: ProductService) { }
