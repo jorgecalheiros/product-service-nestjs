@@ -5,6 +5,20 @@ import { ProductToHttp, ProductViewModel } from './view-models/product-view-mode
 import { ApiTags } from '@nestjs/swagger';
 import { EventPattern, Payload } from '@nestjs/microservices';
 
+export interface ProductUpdateRequest {
+    id: number,
+    product: Partial<ProductCreateRequest>
+}
+
+export interface ProductDeleteRequest {
+    id: number
+}
+
+export interface ProductChangestockRequest {
+    id: number
+    amount: number
+}
+
 @ApiTags('Products')
 @Controller('/api/v1/products')
 export class ProductController {
@@ -41,6 +55,29 @@ export class ProductController {
         this.logger.log(`A product was created, product id:${product.id}`);
     }
 
+    @EventPattern(PRODUCT_SERVICE_TOPICS.update_product)
+    async handleUpdateProduct(
+        @Payload() payload: ProductUpdateRequest
+    ): Promise<any> {
+        const { product } = await this.service.edit(payload.id, payload.product);
+        this.logger.log(`A product of id ${product.id} has been updated`);
+    }
+
+    @EventPattern(PRODUCT_SERVICE_TOPICS.delete_product)
+    async handleDeleteProduct(
+        @Payload() payload: ProductDeleteRequest
+    ) {
+        await this.service.delete(payload.id);
+        this.logger.log(`A product of id ${payload.id} has been deleted`);
+    }
+
+    @EventPattern(PRODUCT_SERVICE_TOPICS.changestock_product)
+    async handleChangeStockProduct(
+        @Payload() payload: ProductChangestockRequest
+    ) {
+        const { product } = await this.service.changeStock(payload.id, payload.amount)
+        this.logger.log(`O estoque do produto ${product.id} foi alterado`);
+    }
 
     /*
     @Post()
