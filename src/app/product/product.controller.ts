@@ -1,9 +1,11 @@
+import { PRODUCT_SERVICE_TOPICS } from './../topics/product-service';
 import { Controller, Get, Param } from '@nestjs/common';
-import { ProductService } from './product.service';
+import { ProductCreateRequest, ProductService } from './product.service';
 import { ProductToHttp, ProductViewModel } from './view-models/product-view-model';
 import { ApiTags } from '@nestjs/swagger';
+import { EventPattern } from '@nestjs/microservices';
 
-@ApiTags('Products')
+
 @Controller('product')
 export class ProductController {
     constructor(private service: ProductService) { }
@@ -28,6 +30,11 @@ export class ProductController {
         } catch (error) {
             return error;
         }
+    }
+
+    @EventPattern(PRODUCT_SERVICE_TOPICS.create_product)
+    async handleProductCreated(data: ProductCreateRequest) {
+        await this.service.store(data);
     }
 
     /*
