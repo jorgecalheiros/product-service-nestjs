@@ -6,7 +6,7 @@ export class ConsumerService extends ServerKafka implements OnModuleDestroy {
     constructor() {
         super({
             client: {
-                clientId: 'PRODUCT_SERVICE',
+                clientId: 'PRODUCT-SERVICE',
                 brokers: [process.env.UPSTASH_KAFKA_REST_URL],
                 sasl: {
                     mechanism: 'scram-sha-256',
@@ -14,6 +14,9 @@ export class ConsumerService extends ServerKafka implements OnModuleDestroy {
                     password: process.env.UPSTASH_KAFKA_REST_PASSWORD,
                 },
                 ssl: true,
+            },
+            consumer: {
+                groupId: 'product-consumer'
             }
         })
     }
