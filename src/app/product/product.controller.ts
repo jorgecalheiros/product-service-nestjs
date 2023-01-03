@@ -1,13 +1,14 @@
 import { PRODUCT_SERVICE_TOPICS } from './../topics/product-service';
-import { Controller, Get, Param } from '@nestjs/common';
+import { Controller, Get, Logger, Param } from '@nestjs/common';
 import { ProductCreateRequest, ProductService } from './product.service';
 import { ProductToHttp, ProductViewModel } from './view-models/product-view-model';
 import { ApiTags } from '@nestjs/swagger';
-import { EventPattern } from '@nestjs/microservices';
+import { EventPattern, Payload } from '@nestjs/microservices';
 
-
+@ApiTags('Products')
 @Controller('product')
 export class ProductController {
+    private readonly logger = new Logger('PRODUCT_SERVICE')
     constructor(private service: ProductService) { }
 
     @Get()
@@ -33,9 +34,13 @@ export class ProductController {
     }
 
     @EventPattern(PRODUCT_SERVICE_TOPICS.create_product)
-    async handleProductCreated(data: ProductCreateRequest) {
-        await this.service.store(data);
+    async handleProductCreated(
+        @Payload() data: ProductCreateRequest
+    ) {
+        const { product } = await this.service.store(data);
+        this.logger.log(`A product was created, product id:${product.id}`);
     }
+
 
     /*
     @Post()
