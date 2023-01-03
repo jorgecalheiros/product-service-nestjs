@@ -23,30 +23,6 @@ async function bootstrap() {
       }
     }
   )
-
   app.listen();
-  /*
-    app.useGlobalPipes(new ValidationPipe());
-  
-    const consumerService = app.get(ConsumerService)
-    
-      app.connectMicroservice<MicroserviceOptions>({
-        strategy: consumerService
-      })
-*/
-  /*
-    const config = new DocumentBuilder()
-      .setTitle('Product Service')
-      .setDescription('Products service api')
-      .setVersion('0.1')
-      .addTag('Product')
-      .build();
-  
-    const document = SwaggerModule.createDocument(app, config);
-    SwaggerModule.setup('api', app, document);
-  
-    await app.startAllMicroservices();
-    await app.listen(3000);
-    */
 }
 bootstrap();
